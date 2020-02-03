@@ -9,6 +9,8 @@ $(document).ready(function(){
     'success' : function(data){
 
       calendarGen();
+      var cane = isSameData(data, moment('2018-01-01'));
+      console.log(cane);
 
     },
     'error' : function(request, state, errors){
@@ -16,8 +18,14 @@ $(document).ready(function(){
     }
   });
 
-  function isSameData(date1, date2){
-    var result = moment(date1).isSame(date2, 'day');
+  function isSameData(date1Obj, date2){
+    var length = date1Obj.response.length;
+    var i = 0;
+    var result = false;
+    while (i < length && result == false){
+      result = moment(date1Obj.response[i].date).isSame(date2, 'day');
+      i++;
+    }
     return result;
   }
 
@@ -27,6 +35,8 @@ $(document).ready(function(){
   function calendarGen(){
     var firstMonth = moment('2018').startOf('year');
     var monthDays = moment(firstMonth).daysInMonth();
+
+    // stampo il primo del mese
     var day = moment(firstMonth).format('D');
     var month = moment(firstMonth).format('MMMM');
     var source = $("#entry-template").html();
@@ -38,6 +48,7 @@ $(document).ready(function(){
     var html = template(monthD);
     $('.month').append(html)
 
+    // stampo il resto dei giorni
     for(var i = 1; i < monthDays; i++){
       firstMonth = moment(firstMonth, "YYYY-MMMM-D").add(1, 'days');
       day = moment(firstMonth).format('D');
