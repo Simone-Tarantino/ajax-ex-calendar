@@ -1,23 +1,5 @@
 $(document).ready(function(){
-  var firstDMonth = moment([2018, 0, 1]);
-  var lastDMonth = moment([2018, 1, 1]);
-  var monthLength = lastDMonth.diff(firstDMonth, 'days');
-  for(var i = 1; i <= monthLength; i++){
-    // var source = $("entry-template").html();
-    // var template = Handlebars.compile(source);
-    var day = i;
-    var month = moment(firstDMonth).format('MMMM');
-    console.log(day + ' ' + month);
-    var source = $("#entry-template").html();
-    var template = Handlebars.compile(source);
-    var dayObj = {
-      'day' : day,
-      'month' : month
-    };
-    var html = template(dayObj);
-    $('.month').append(html);
-  }
-
+  calendarGen();
   $.ajax({
     'url' : 'https://flynn.boolean.careers/exercises/api/holidays',
     'method' : 'GET',
@@ -29,9 +11,30 @@ $(document).ready(function(){
     }
   });
 
+  // function calendarGen(){
+  //   var firstDMonth = moment([2018, 0, 1]);
+  //   var lastDMonth = moment([2018, 1, 1]);
+  //   var monthLength = lastDMonth.diff(firstDMonth, 'days');
+  //   for(var i = 1; i <= monthLength; i++){
+  //     var day = moment(firstDMonth).format('D');
+  //     var source = $("#entry-template").html();
+  //     var template = Handlebars.compile(source);
+  //     var dayObj = {
+  //       'day' : day,
+  //       'month' : moment(firstDMonth).format('MMMM')
+  //     };
+  //     var html = template(dayObj);
+  //     $('.month').append(html);
+  //   }
+  // }
+
   function calendarGen(){
+    var firstMonth = moment([2018, 0, 1]);
+    console.log(firstMonth);
+    var monthDays = moment(firstMonth).daysInMonth();
+    console.log(monthDays);
+    for(var i = 0; i < monthDays; i++){
 
+    }
   }
-
-
 });
