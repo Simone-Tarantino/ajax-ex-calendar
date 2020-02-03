@@ -6,8 +6,8 @@ $(document).ready(function(){
     // var source = $("entry-template").html();
     // var template = Handlebars.compile(source);
     var day = i;
-    var month = moment(firstDMonth).month();
-    console.log(day);
+    var month = moment(firstDMonth).format('MMMM');
+    console.log(day + ' ' + month);
     var source = $("#entry-template").html();
     var template = Handlebars.compile(source);
     var dayObj = {
