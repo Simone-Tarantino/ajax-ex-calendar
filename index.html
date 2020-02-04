@@ -13,13 +13,19 @@
   </head>
   <body>
 
-    <ul class="month">
+    <span class="prev">prev</span>
+    <h1></h1>
+    <span class="next">next</span>
+
+    <ul class="month-days">
 
     </ul>
 
 
     <script id="entry-template" type="text/x-handlebars-template">
-        <li>{{DD}} {{MMMM}} {{FESTIVITY}}</li>
+        <li class = "day" data-date-complete="{{dataComplete}}">
+          <span>{{day}}</span> <span>{{month}}</span> <span class = "holiday-name">{{holiday}}</span>
+        </li>
     </script>
   </body>
 </html>

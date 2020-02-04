@@ -1,95 +1,69 @@
 $(document).ready(function(){
-  $.ajax({
-    'url' : 'https://flynn.boolean.careers/exercises/api/holidays',
-    'method' : 'GET',
-    'data' : {
-      'year' : 2018,
-      'month' : 0
-    },
-    'success' : function(data){
-      var firstMonth = moment('2018').startOf('year');
-      var monthDays = moment(firstMonth).daysInMonth();
-      var same = isSameData(data, firstMonth);
-      console.log(same);
-      // stampo il primo del mese
-      var day = moment(firstMonth).format('D');
-      var month = moment(firstMonth).format('MMMM');
-      if (same == true) {
-        var source = $("#entry-template").html();
-        var template = Handlebars.compile(source);
-        var monthD = {
-          'DD' : day,
-          'MMMM' : month
-          // 'FESTIVITY' :
-        };
-        var html = template(monthD);
-        $('.month').append(html)
-      } else {
-        var source = $("#entry-template").html();
-        var template = Handlebars.compile(source);
-        var monthD = {
-          'DD' : day,
-          'MMMM' : month,
-          // 'FESTIVITY' : data.response
-        };
-        var html = template(monthD);
-        $('.month').append(html)
-      }
-      // stampo il resto dei giorni
-      for(var i = 1; i < monthDays; i++){
-        firstMonth = moment(firstMonth, "YYYY-MMMM-D").add(1, 'days');
-        same = isSameData(data, firstMonth);
-        console.log(same);
-        day = moment(firstMonth).format('D');
-        month = moment(firstMonth).format('MMMM');
-        if (same == true) {
-          var source = $("#entry-template").html();
-          var template = Handlebars.compile(source);
-          var monthD = {
-            'DD' : day,
-            'MMMM' : month
-          };
-          var html = template(monthD);
-          $('.month').append(html);
-        } else {
-          var source = $("#entry-template").html();
-          var template = Handlebars.compile(source);
-          var monthD = {
-            'DD' : day,
-            'MMMM' : month
-          };
-          var html = template(monthD);
-          $('.month').append(html);
-        }
-      }
-    },
-    'error' : function(request, state, errors){
-      alert(errors);
-    }
+
+  //stampo a schermo tutti i giorni del mese
+
+  var thisMonth = 0;
+  var year = 2018;
+  var baseMonth = moment({
+    'year' : year,
+    'month' : thisMonth
   });
 
-  // funzione per verificare la data nella chiamata
+  getDaysMonth(baseMonth);
 
-  function isSameData(date1Obj, date2){
-    var length = date1Obj.response.length;
-    var i = 0;
-    var result = false;
-    while (i < length && result == false){
-      result = moment(date1Obj.response[i].date).isSame(date2, 'day');
-      i++;
+
+  function getDaysMonth(month){
+    // genero dinamicamente l'h1 visualizzandolo a lettere con l'anno vicino
+    $('h1').text(month.format('MMMM YYYY'));
+    // ciclo che genera i numeri del mese + nome del mese tutto stampato su html
+    for(var i = 1; i <= 31; i++){
+      var source = $("#entry-template").html();
+      var template = Handlebars.compile(source);
+      // oggetto da stampare con handlebars
+      var context = {
+        // i giorni sono = all i che cicla
+        'day' : i,
+        // i mesi sono uguali al valore (month) che andremo a passare alla nostra funzione e verrà visualizzato in formato "lettere"
+        'month' : month.format('MMMM'),
+        // la data completa che servirà per identificare le varie festività che riceveremo tramite la chiamata api, è uguale al valore che passeremo alla nostra funzione (che ci mostrerà sia l'anno che il mese scritto questa volta in numeri) + il giorno che è la i che viene ciclata con la funzione addZero
+        'dataComplete' : month.format('YYYY-MM') + '-' + addZeroDate(i)
+      };
+      var html = template(context);
+      $('.month-days').append(html);
     }
-    return result;
   }
 
-  function whichFestivity(date1Obj, date2){
-    var length = date1Obj.response.length;
-    var i = 0;
-    var result = false;
-    while (i < length && result == false){
-      result = moment(date1Obj.response[i].date).isSame(date2, 'day');
-      i++;
+  function getHoliday(month){
+    $.ajax({
+      'url' : 'https://flynn.boolean.careers/exercises/api/holidays',
+      'method' : 'GET',
+      'data' : {
+        'year' : month.year(),
+        'month' : month.month()
+      },
+      'success' : function(data) {
+        var holidays = data.response;
+        for (var i = 0; i < holidays.length; i++) {
+          var thisHoliday = holidays[i];
+          var thisHolidayDate = thisHoliday.date;
+          $('.day').each(function (){
+            var dateElement = $(this).attr('data-date-complete');
+            if (thisHolidayData == elementDate) {
+              $(this).addClass('holiday');
+              $(this).find('.holiday-name').append(thisHoliday.name);
+            }
+          });
+        }
+      }
+    });
+  }
+
+  // funzione per aggiungere lo zero prima del numero del giorno nei giorni fino a 10
+  function addZeroDate(num){
+    if (num < 10){
+      return '0' + num;
     }
-    return result;
+    return num;
   }
 
 });
