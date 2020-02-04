@@ -2,7 +2,7 @@ $(document).ready(function(){
 
   //stampo a schermo tutti i giorni del mese
 
-  var thisMonth = 0;
+  var thisMonth = 3;
   var year = 2018;
   var baseMonth = moment({
     'year' : year,
