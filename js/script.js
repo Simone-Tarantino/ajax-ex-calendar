@@ -10,6 +10,7 @@ $(document).ready(function(){
   });
 
   getDaysMonth(baseMonth);
+  getHoliday(baseMonth);
 
 
   function getDaysMonth(month){
@@ -48,7 +49,7 @@ $(document).ready(function(){
           var thisHolidayDate = thisHoliday.date;
           $('.day').each(function (){
             var dateElement = $(this).attr('data-date-complete');
-            if (thisHolidayData == elementDate) {
+            if (thisHolidayDate == dateElement) {
               $(this).addClass('holiday');
               $(this).find('.holiday-name').append(thisHoliday.name);
             }
