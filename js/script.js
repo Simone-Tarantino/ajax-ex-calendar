@@ -62,8 +62,18 @@ $(document).ready(function(){
         var html = template(context);
         $('.month-days').append(html);
       }
-    } else {
+      // se l'anno è 2017 si torna a gennaio 2018
+    } else if (moment(month).isSame('2017', 'year') == true) {
       alert('Data non accessibile');
+      var nextMonth =  moment(month).add(1, 'M');
+      getDaysMonth(nextMonth);
+      getHoliday(nextMonth);
+      // se l'anno è 2019 si torna a dicembre 2018
+    } else if (moment(month).isSame('2019', 'year') == true) {
+      alert('Data non accessibile');
+      var prevMonth =  moment(month).subtract(1, 'M');
+      getDaysMonth(prevMonth);
+      getHoliday(prevMonth);
     }
   }
 
